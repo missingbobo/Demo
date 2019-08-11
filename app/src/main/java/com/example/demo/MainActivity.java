@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.os.Handler;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -20,7 +21,7 @@ import android.widget.Toast;
 
 
 public class MainActivity extends Activity {
-
+    Button button;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -44,6 +45,23 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Utils.saveToken("this is loged", MainActivity.this);
+            }
+        });
+        button = findViewById(R.id.button);
+        button.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if(motionEvent.getAction()==MotionEvent.ACTION_DOWN){
+                    Toast.makeText(getApplicationContext(),"down",Toast.LENGTH_SHORT).show();
+
+                }
+                if(motionEvent.getAction() == MotionEvent.ACTION_UP){
+                    Toast.makeText(getApplicationContext(),"up",Toast.LENGTH_SHORT).show();
+                }
+                if(motionEvent.getAction() == MotionEvent.ACTION_MOVE){
+
+                }
+                return false;
             }
         });
 

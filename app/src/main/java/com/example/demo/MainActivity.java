@@ -6,8 +6,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -19,9 +22,9 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 
-
 public class MainActivity extends Activity {
     Button button;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -51,17 +54,34 @@ public class MainActivity extends Activity {
         button.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                if(motionEvent.getAction()==MotionEvent.ACTION_DOWN){
-                    Toast.makeText(getApplicationContext(),"down",Toast.LENGTH_SHORT).show();
+                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                    Toast.makeText(getApplicationContext(), "down", Toast.LENGTH_SHORT).show();
 
                 }
-                if(motionEvent.getAction() == MotionEvent.ACTION_UP){
-                    Toast.makeText(getApplicationContext(),"up",Toast.LENGTH_SHORT).show();
+                if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                    Toast.makeText(getApplicationContext(), "up", Toast.LENGTH_SHORT).show();
                 }
-                if(motionEvent.getAction() == MotionEvent.ACTION_MOVE){
+                if (motionEvent.getAction() == MotionEvent.ACTION_MOVE) {
 
                 }
                 return false;
+            }
+        });
+        findViewById(R.id.flow).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    if (!Settings.canDrawOverlays(getApplicationContext())) {
+                        Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName()));
+                        startActivity(intent);
+                        return;
+                    }else{
+                        startService(new Intent(MainActivity.this, FlowService.class));
+                    }
+                    //do something...
+                }else{
+                    Toast.makeText(MainActivity.this, "small", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 

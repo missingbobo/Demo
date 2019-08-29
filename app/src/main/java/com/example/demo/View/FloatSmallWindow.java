@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.View;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,6 +8,8 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.demo.R;
 
 import java.lang.reflect.Field;
 

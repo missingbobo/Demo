@@ -1,11 +1,11 @@
-package com.example.demo;
+package com.example.demo.Dao;
 
-import android.app.ActionBar;
 import android.content.Context;
 import android.graphics.PixelFormat;
 import android.view.Gravity;
 import android.view.WindowManager;
-import android.widget.LinearLayout;
+
+import com.example.demo.View.FloatSmallWindow;
 
 public class MyWindowManager {
     private static WindowManager mWindowManager;

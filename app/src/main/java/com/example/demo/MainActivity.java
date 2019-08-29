@@ -1,140 +1,101 @@
 package com.example.demo;
 
 import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
+import android.app.Dialog;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.graphics.Color;
-import android.net.Uri;
-import android.os.Build;
-import android.os.Handler;
 import android.os.Bundle;
-import android.provider.Settings;
-import android.util.Log;
-import android.view.MotionEvent;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.BaseAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
 
 
 public class MainActivity extends Activity {
-    Button button;
+    String[] items = new String[]{"List", "Dialog"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        IntentFilter filter = new IntentFilter();
-        filter.addAction("asdfas");
-        registerReceiver(registerReceiver, filter);
-        findViewById(R.id.list).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ListActivity.class);
-                intent.putExtra("phone", "123134243");
-                startActivity(intent);
-//               finish();
-//                 a();
-//                getToken();
-            }
-        });
-        findViewById(R.id.put).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Utils.saveToken("this is loged", MainActivity.this);
-            }
-        });
-        button = findViewById(R.id.button);
-        button.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                    Toast.makeText(getApplicationContext(), "down", Toast.LENGTH_SHORT).show();
-
-                }
-                if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-                    Toast.makeText(getApplicationContext(), "up", Toast.LENGTH_SHORT).show();
-                }
-                if (motionEvent.getAction() == MotionEvent.ACTION_MOVE) {
-
-                }
-                return false;
-            }
-        });
-        findViewById(R.id.flow).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    if (!Settings.canDrawOverlays(getApplicationContext())) {
-                        Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName()));
-                        startActivity(intent);
-                        return;
-                    }else{
-                        startService(new Intent(MainActivity.this, FlowService.class));
-                    }
-                    //do something...
-                }else{
-                    Toast.makeText(MainActivity.this, "small", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+        ListView listView = findViewById(R.id.list);
+        listView.setAdapter(new mAdapter());
 
     }
 
-    BroadcastReceiver registerReceiver = new BroadcastReceiver() {
+    class mAdapter extends BaseAdapter {
+
         @Override
-        public void onReceive(Context context, Intent intent) {
-
+        public int getCount() {
+            return items.length;
         }
-    };
 
+        @Override
+        public Object getItem(int i) {
+            return items[i];
+        }
 
-    private void getToken() {
-        String token = Utils.getToken(MainActivity.this);
-        toast(token);
-    }
+        @Override
+        public long getItemId(int i) {
+            return i;
+        }
 
-    private void a() {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                toast("time is up");
+        @Override
+        public View getView(int i, View convertView, ViewGroup viewGroup) {
+            ViewHolder holder = null;
+            View view;
+            if (convertView == null) {
+                holder = new ViewHolder();
+                view = LayoutInflater.from(MainActivity.this).inflate(R.layout.main_item, null);
+                holder.tv = view.findViewById(R.id.show);
+                view.setTag(holder);
+            } else {
+                view = convertView;
+                holder = (ViewHolder) convertView.getTag();
             }
-        }, 2000);
-    }
+            holder.tv.setOnClickListener(new mClick(items[i]));
+            holder.tv.setText(items[i]);
+            return view;
+        }
 
-    private void toast(String content) {
-        Toast.makeText(this, content, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
+        class ViewHolder {
+            TextView tv;
+        }
 
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.e("main", "onResume: ");
+    class mClick implements View.OnClickListener {
+        String item;
+
+        public mClick(String id) {
+            this.item = id;
+        }
+
+        @Override
+        public void onClick(View view) {
+            if (getActivityByName(item) != null) {
+                Intent intent = new Intent();
+                intent.setClass(MainActivity.this, getActivityByName(item));
+                startActivity(intent);
+            }
+        }
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
+    private Class getActivityByName(String name) {
+        if (name.equals("List")) {
+            return ListActivity.class;
+        }
+        if (name.equals("Dialog")) {
+            return DialogActivity.class;
+        }
+
+        return null;
+
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        unregisterReceiver(registerReceiver);
 
-    }
 }
 

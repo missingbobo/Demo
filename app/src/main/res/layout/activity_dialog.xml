@@ -4,11 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".DialogActivity">
+
     <Button
         android:id="@+id/show"
         android:layout_width="match_parent"
-        android:text="show dialog"
-        android:layout_height="50dp" />
+        android:layout_height="50dp"
+        android:text="show dialog" />
+
+    <Button
+        android:id="@+id/show2"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="日期" />
 
 </LinearLayout>

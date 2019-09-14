@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 
 public class MainActivity extends Activity {
-    String[] items = new String[]{"List", "Dialog"};
+    String[] items = new String[]{"List", "Dialog", "ViewPager"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +91,9 @@ public class MainActivity extends Activity {
         if (name.equals("Dialog")) {
             return DialogActivity.class;
         }
-
+        if (name.equals("ViewPager")) {
+            return ViewPagerActivity.class;
+        }
         return null;
 
     }

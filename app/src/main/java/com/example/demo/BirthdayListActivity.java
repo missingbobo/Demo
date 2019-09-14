@@ -6,11 +6,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
+import com.bumptech.glide.Glide;
 import com.example.demo.Dao.DBHelper;
 import com.example.demo.Dao.Person;
 
@@ -71,6 +73,9 @@ public class BirthdayListActivity extends Activity {
             TextView birth = convertView.findViewById(R.id.birth);
             Person person = items.get(index);
             String gender = person.getGender()==Person.GENDER_BOY?"♂":"♀";
+            String avatar = "https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=20577780,3476556477&fm=26&gp=0.jpg";
+            ImageView avatarImg = convertView.findViewById(R.id.avatar);
+            Glide.with(BirthdayListActivity.this).load(avatar).into(avatarImg);
             name.setText(gender+"  "+person.getName());
             birth.setText(person.getYear()+"年"+person.getMonth()+"月"+person.getDay()+"日");
             return convertView;

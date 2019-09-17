@@ -33,10 +33,11 @@
                 android:textColor="#FFF"></TextView>
 
             <TextView
+                android:id="@+id/weather"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="right"
-                android:text="北京 晴"
+                android:text=""
                 android:textColor="#fff"></TextView>
 
         </LinearLayout>

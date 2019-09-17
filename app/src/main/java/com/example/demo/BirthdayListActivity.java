@@ -3,6 +3,7 @@ package com.example.demo;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -15,6 +16,13 @@ import androidx.annotation.Nullable;
 import com.bumptech.glide.Glide;
 import com.example.demo.Dao.DBHelper;
 import com.example.demo.Dao.Person;
+import com.lzy.okgo.OkGo;
+import com.lzy.okgo.callback.StringCallback;
+import com.lzy.okgo.model.Response;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -22,6 +30,7 @@ public class BirthdayListActivity extends Activity {
     //从数据库里取数据
     //展示到界面
     ListView listView;
+    private final String TAG = "BirthList";
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +44,7 @@ public class BirthdayListActivity extends Activity {
             }
         });
         listView = findViewById(R.id.list);
+        getWeatherInfo();
 
     }
 
@@ -80,6 +90,30 @@ public class BirthdayListActivity extends Activity {
             birth.setText(person.getYear()+"年"+person.getMonth()+"月"+person.getDay()+"日");
             return convertView;
         }
+    }
+    private void getWeatherInfo(){
+        OkGo.<String>get("http://wthrcdn.etouch.cn/weather_mini?city=北京").tag(this).execute(new StringCallback() {
+            @Override
+            public void onSuccess(Response<String> response) {
+                Log.e(TAG, "onSuccess: "+response.body());
+                try {
+                    JSONObject obj = new JSONObject(response.body());
+                    JSONObject data = obj.optJSONObject("data");
+                    JSONArray forecast = data.optJSONArray("forecast");
+                    JSONObject info = forecast.optJSONObject(0);
+                    TextView weather = findViewById(R.id.weather);
+                    weather.setText(data.optString("city")+" "+info.optString("type"));
+                }catch (Exception e){
+
+                }
+            }
+
+            @Override
+            public void onError(Response<String> response) {
+                super.onError(response);
+                Log.e(TAG, "onError: "+response.getException() );
+            }
+        });
     }
 
 

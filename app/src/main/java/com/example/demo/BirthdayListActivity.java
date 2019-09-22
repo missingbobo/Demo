@@ -113,6 +113,7 @@ public class BirthdayListActivity extends Activity {
                 super.onError(response);
                 Log.e(TAG, "onError: "+response.getException() );
             }
+
         });
     }
 

@@ -85,6 +85,7 @@ public class AddActivity extends Activity {
             if(resultCode==1) {
                 String avatr = data.getStringExtra("avatar");
                 Glide.with(AddActivity.this).load(avatr).into(avatar);
+                person.setAvatar(avatr);
             }else{
                 Toast.makeText(this, "没有设置头像", Toast.LENGTH_SHORT).show();
             }

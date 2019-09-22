@@ -21,6 +21,7 @@ import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.Response;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
 
@@ -83,14 +84,14 @@ public class BirthdayListActivity extends Activity {
             TextView birth = convertView.findViewById(R.id.birth);
             Person person = items.get(index);
             String gender = person.getGender()==Person.GENDER_BOY?"♂":"♀";
-            String avatar = "https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=20577780,3476556477&fm=26&gp=0.jpg";
             ImageView avatarImg = convertView.findViewById(R.id.avatar);
-            Glide.with(BirthdayListActivity.this).load(avatar).into(avatarImg);
+            Glide.with(BirthdayListActivity.this).load(person.getAvatar()).into(avatarImg);
             name.setText(gender+"  "+person.getName());
             birth.setText(person.getYear()+"年"+person.getMonth()+"月"+person.getDay()+"日");
             return convertView;
         }
     }
+
     private void getWeatherInfo(){
         OkGo.<String>get("http://wthrcdn.etouch.cn/weather_mini?city=北京").tag(this).execute(new StringCallback() {
             @Override
